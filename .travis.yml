@@ -1,0 +1,45 @@
+language: cpp
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
+before_script:
+
+- echo "deb http://archive.ubuntu.com/ubuntu xenial main universe" | sudo tee -a /etc/apt/sources.list
+- sudo apt-get install doxygen
+- sudo apt-get update -qq
+before_install:
+  # C++17
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+# Install dependencies
+install: 
+  # C++17
+  - sudo apt-get install -qq g++-6
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+script:
+- cmake .
+- cmake --build .
+- cmake --build . --target package
+- doxygen Doxyfile
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+    repo: Ashes1st/matrix
+    keep_history: true
+    target_branch: master
+    local_dir: doxygen
+    verbose: true
+    on:
+      branch: page
+  - provider: script
+    skip_cleanup: true
+    script:
+    - curl -T matrix-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uashes1st:$BINTRAY_API_KEY "https://api.bintray.com/content/alex-ashes1st/otus/matrix/$TRAVIS_BUILD_NUMBER/matrix-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
