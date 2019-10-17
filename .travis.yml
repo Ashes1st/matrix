@@ -20,7 +20,7 @@ before_install:
   - sudo apt-get update -qq
 # Install dependencies
 install: 
-  # C++17
+  #  C++17
   - sudo apt-get install -qq g++-6
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
 script:
