@@ -33,13 +33,10 @@ deploy:
     skip_cleanup: true
     github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
     repo: Ashes1st/matrix
-    keep_history: true
-    target_branch: master
-    local_dir: doxygen
-    verbose: true
+    local_dir: docs/html
     on:
-      branch: page
+      branch: master
   - provider: script
     skip_cleanup: true
     script:
-    - curl -T matrix-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uashes1st:$BINTRAY_API_KEY "https://api.bintray.com/content/alex-ashes1st/otus/matrix/$TRAVIS_BUILD_NUMBER/matrix-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
+    - curl -T matrix-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uashes1st:$BINTRAY_API_KEY "https://api.bintray.com/content/ashes1st-otus/otus/matrix/$TRAVIS_BUILD_NUMBER/matrix-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
